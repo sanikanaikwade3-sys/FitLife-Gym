@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitLife Gym | Fitness Starts Here</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <a href="/" class="logo">
+            <span class="logo-icon">🏋️</span>
+            <span>FitLife <span class="brand-green">Gym</span></span>
+        </a>
+
+        <nav class="nav-right">
+            <span>Stronger</span>
+            <span class="dot">•</span>
+            <span>Healthier</span>
+            <span class="dot">•</span>
+            <span>Happier</span>
+        </nav>
+    </header>
+
+    <main class="main-section">
+        <div class="hero-content">
+
+            <span class="eyebrow">YOUR FITNESS. YOUR FUTURE.</span>
+
+            <h1>
+                Transform Your Body.<br>
+                <span>Elevate Your Life.</span>
+            </h1>
+
+            <p class="description">
+                Build strength, improve your health, and become
+                the best version of yourself with expert trainers
+                and modern fitness facilities.
+            </p>
+
+            <div class="features">
+                <article class="feature">
+                    <div class="feature-icon">♧</div>
+                    <h3>Modern Equipment</h3>
+                    <p>Train with confidence.</p>
+                </article>
+
+                <article class="feature">
+                    <div class="feature-icon">♙</div>
+                    <h3>Expert Trainers</h3>
+                    <p>Reach your fitness goals.</p>
+                </article>
+
+                <article class="feature">
+                    <div class="feature-icon">♡</div>
+                    <h3>Flexible Plans</h3>
+                    <p>Fitness that fits your life.</p>
+                </article>
+            </div>
+
+            <button type="button" class="register-open" id="open-form">
+                Register Now <span>→</span>
+            </button>
+
+            <p class="hero-note">
+                Your journey to a healthier life starts with one step.
+            </p>
+        </div>
+    </main>
+
+    <!-- Registration popup -->
+
+    <div class="modal" id="registration-modal" hidden>
+        <div class="modal-overlay" id="modal-overlay"></div>
+
+        <section class="form-card"
+                 role="dialog"
+                 aria-modal="true"
+                 aria-labelledby="form-title">
+
+            <button type="button" class="close-button" id="close-form"
+                    aria-label="Close registration form">×</button>
+
+            <div class="form-heading">
+                <div class="person-icon">♙</div>
+                <div>
+                    <span class="form-eyebrow">BECOME A MEMBER</span>
+                    <h2 id="form-title">Join FitLife Gym</h2>
+                    <p>Start your fitness journey today.</p>
+                </div>
+            </div>
+
+            <div class="message" id="message" hidden>
+                <span id="message-text" role="status" aria-live="polite"></span>
+                <button type="button" id="close-message"
+                        aria-label="Dismiss message">×</button>
+            </div>
+
+            <form id="registration-form">
+                <div class="form-grid">
+
+                    <div class="field">
+                        <label for="name">Full Name <b>*</b></label>
+                        <input type="text" id="name" name="name"
+                               placeholder="Enter your full name"
+                               autocomplete="name" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="email">Email Address <b>*</b></label>
+                        <input type="email" id="email" name="email"
+                               placeholder="Enter your email"
+                               autocomplete="email" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="phone">Phone Number <b>*</b></label>
+                        <input type="tel" id="phone" name="phone"
+                               placeholder="10-digit mobile number"
+                               inputmode="numeric" maxlength="10" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="age">Age <b>*</b></label>
+                        <input type="number" id="age" name="age"
+                               placeholder="Enter your age"
+                               min="16" max="100" required>
+                    </div>
+
+                    <div class="field full-width">
+                        <label for="plan">Membership Plan <b>*</b></label>
+                        <select id="plan" name="plan" required>
+                            <option value="" disabled selected>Select a plan</option>
+                            <option value="Basic">Basic Membership</option>
+                            <option value="Standard">Standard Membership</option>
+                            <option value="Premium">Premium Membership</option>
+                        </select>
+                    </div>
+
+                    <div class="field full-width">
+                        <label for="startDate">Start Date <b>*</b></label>
+                        <input type="date" id="startDate" name="startDate" required>
+                    </div>
+
+                </div>
+
+                <fieldset class="gender">
+                    <legend>Gender <b>*</b></legend>
+
+                    <label>
+                        <input type="radio" name="gender" value="Male" required>
+                        Male
+                    </label>
+
+                    <label>
+                        <input type="radio" name="gender" value="Female">
+                        Female
+                    </label>
+
+                    <label>
+                        <input type="radio" name="gender" value="Other">
+                        Other
+                    </label>
+                </fieldset>
+
+                <button type="submit" class="submit-button" id="register-button">
+                    Complete Registration <span>→</span>
+                </button>
+
+                <p class="form-note">* All fields are required.</p>
+            </form>
+        </section>
+    </div>
+
+    <footer>
+        <span>© 2026 FitLife Gym</span>
+        <span>Stronger every day. Better every step.</span>
+    </footer>
+
+    <script src="/script.js"></script>
+</body>
+</html>
