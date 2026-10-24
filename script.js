@@ -104,7 +104,7 @@ form.addEventListener("submit", async function (event) {
     registerButton.textContent = "Submitting...";
 
     try {
-        const response = await fetch("/register", {
+        const response = await fetch("https://fitlife-gym-y0qg.onrender.com/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
