@@ -1,4 +1,6 @@
 
+const API_BASE_URL = "https://fitlife-gym-y0qg.onrender.com";
+
 const form = document.getElementById("registration-form");
 const modal = document.getElementById("registration-modal");
 
@@ -14,13 +16,20 @@ const registerButton = document.getElementById("register-button");
 const startDate = document.getElementById("startDate");
 const phoneInput = document.getElementById("phone");
 
-// Set the minimum membership start date to today
-const today = new Date();
-const year = today.getFullYear();
-const month = String(today.getMonth() + 1).padStart(2, "0");
-const day = String(today.getDate()).padStart(2, "0");
+// Set today's date as the minimum membership start date
+function setMinimumDate() {
+    const today = new Date();
 
-startDate.min = `${year}-${month}-${day}`;
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+
+    startDate.min = `${year}-${month}-${day}`;
+
+    return `${year}-${month}-${day}`;
+}
+
+let minimumDate = setMinimumDate();
 
 // Allow only digits and a maximum of 10 digits
 phoneInput.addEventListener("input", function () {
@@ -69,23 +78,26 @@ function hideMessage() {
     message.className = "message";
 }
 
+// Close message
 closeMessage.addEventListener("click", hideMessage);
 
 // Clear message when the user changes the form
 form.addEventListener("input", hideMessage);
 form.addEventListener("change", hideMessage);
 
-// Submit registration to Node.js backend
+// Submit registration to the Render backend
 form.addEventListener("submit", async function (event) {
     event.preventDefault();
 
     hideMessage();
 
+    // Check browser-side form validation
     if (!form.checkValidity()) {
         form.reportValidity();
         return;
     }
 
+    // Validate mobile number
     const mobile = phoneInput.value.trim();
 
     if (!/^\d{10}$/.test(mobile)) {
@@ -93,55 +105,102 @@ form.addEventListener("submit", async function (event) {
             "Mobile number must contain exactly 10 digits.",
             "error"
         );
+
         phoneInput.focus();
         return;
     }
 
+    // Collect form data
     const formData = new FormData(form);
     const registrationData = Object.fromEntries(formData.entries());
 
+    // Disable the button while submitting
     registerButton.disabled = true;
     registerButton.textContent = "Submitting...";
 
     try {
-        const response = await fetch("https://fitlife-gym-y0qg.onrender.com/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(registrationData)
-        });
+        // Check that the Render URL has been added
+        if (
+            API_BASE_URL.includes("YOUR-RENDER-BACKEND-URL") ||
+            !API_BASE_URL.startsWith("https://")
+        ) {
+            throw new Error(
+                "Please add your actual Render backend URL in script.js."
+            );
+        }
 
-        const result = await response.json();
+        // Send the request to the Render backend
+        const response = await fetch(
+            `${API_BASE_URL.replace(/\/+$/, "")}/register`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(registrationData)
+            }
+        );
 
+        // Read the response as text first to avoid JSON parsing errors
+        const responseText = await response.text();
+
+        console.log("Backend response status:", response.status);
+        console.log("Backend response:", responseText);
+
+        let result;
+
+        try {
+            result = JSON.parse(responseText);
+        } catch {
+            throw new Error(
+                `The backend returned an invalid response (HTTP ${response.status}). Check the Render URL, /register route, and Render logs.`
+            );
+        }
+
+        // Handle unsuccessful responses
         if (!response.ok) {
             const errorText = Array.isArray(result.errors)
                 ? result.errors.join(" ")
-                : result.message || "Please check your details and try again.";
+                : result.message ||
+                  "Registration failed. Please check your details.";
 
             showMessage(errorText, "error");
             return;
         }
 
+        // Display successful registration message
         showMessage(
-            result.message || "Registration completed successfully!",
+            result.message ||
+                "Registration completed successfully!",
             "success"
         );
 
+        // Reset the form after successful registration
         form.reset();
 
-        // Restore today's minimum date after resetting the form
-        startDate.min = `${year}-${month}-${day}`;
+        minimumDate = setMinimumDate();
+        startDate.min = minimumDate;
 
     } catch (error) {
-        showMessage(
-            "Unable to connect to the server. Please try again.",
-            "error"
-        );
-
         console.error("Registration error:", error);
 
+        if (
+            error.message.includes("Please add your actual Render")
+        ) {
+            showMessage(error.message, "error");
+        } else if (
+            error.message.includes("invalid response")
+        ) {
+            showMessage(error.message, "error");
+        } else {
+            showMessage(
+                "Unable to connect to the backend. Check your Render URL, backend status, and CORS settings.",
+                "error"
+            );
+        }
+
     } finally {
+        // Enable the button again
         registerButton.disabled = false;
         registerButton.innerHTML =
             'Complete Registration <span>→</span>';
