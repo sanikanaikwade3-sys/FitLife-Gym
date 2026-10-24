@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 
 // Replace this with your actual GitHub Pages origin
 app.use(cors({
-    origin: "https://sanikanaikwade3-sys.github.io/FitLife-Gym/"
+    origin: "https://sanikanaikwade3-sys.github.io"
 }));
 
 app.use(express.json());
